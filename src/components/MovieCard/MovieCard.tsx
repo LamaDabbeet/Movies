@@ -1,8 +1,9 @@
 import { differenceInDays, fromUnixTime } from "date-fns";
-import { Card, Title, DaysAgo } from "./MovieCard.styled";
+import { Card, Title, DaysAgo, ButtonWrapper } from "./MovieCard.styled";
 import Button from "../Button/Button";
 import { Movie } from "../../types/movie";
-import { FC } from "react";
+import { FC, useRef } from "react";
+import { colors } from "../../theme/colors";
 
 interface MovieCardInterface {
   movie: Movie;
@@ -19,27 +20,31 @@ const MovieCard: FC<MovieCardInterface> = ({
   isLeft,
   index,
 }) => {
+
+const updateColor= (el:any)=> {
+  if (isLeft) el.style.backgroundColor = `${colors.lightGreen}`;
+  else el.style.backgroundColor = `${colors.lightRed}`;
+}
+  const timerRef = useRef<any>(null);
+  const onMouseEnter = (e:any) => {
+    const el = e.currentTarget; 
+    if(timerRef){
+      timerRef.current = setTimeout(() => {updateColor(el)}, 25);
+    }
+  }
+
+  const onMouseLeave = (e:any) => {
+    if(timerRef.current) {
+      clearTimeout(timerRef.current);
+      (e.currentTarget.style.backgroundColor = `${colors.white}`)
+      }
+  }
+
   return (
     <Card
       id={isLeft ? "left-movie-" + index : "right-movie-" + index}
-      onMouseOver={(e: any) => {
-        const el = e.currentTarget;
-        let l = 0;
-        function updateColor(newl: number) {
-          l = newl;
-          if (isLeft) el.style.backgroundColor = `#64c864${20 + l * 5}`;
-          else el.style.backgroundColor = `#c86464${20 + l * 5}`;
-          if (l < 10) {
-            setTimeout(() => updateColor(l + 1), 25);
-          }
-        }
-        setTimeout(() => updateColor(l + 1), 25);
-      }}
-      onMouseLeave={(e: any) =>
-        (e.currentTarget.style.backgroundColor = isLeft
-          ? "#64c86420"
-          : "#c8646420")
-      }
+      onMouseOver={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     >
       <Title
         id={isLeft ? "left-movie-title-" + index : "right-movie-title-" + index}
@@ -52,25 +57,28 @@ const MovieCard: FC<MovieCardInterface> = ({
         ago
       </DaysAgo>
       {isLeft ? (
-        <Button
-          variant="success"
-          size="large"
-          outline={true}
-          onClick={() => onAddClick(movie)}
-        >
-          {" "}
-          Add{" "}
-        </Button>
+        <ButtonWrapper>
+          <Button
+            variant="success"
+            size="medium"
+            onClick={() => onAddClick(movie)}
+          >
+            {" "}
+            Add{" "}
+          </Button>
+        </ButtonWrapper>
+ 
       ) : (
-        <Button
-          variant="danger"
-          size="large"
-          outline={true}
-          onClick={() => onRemoveClick(movie)}
-        >
-          {" "}
-          Remove{" "}
-        </Button>
+        <ButtonWrapper>
+          <Button
+            variant="danger"
+            size="medium"
+            onClick={() => onRemoveClick(movie)}
+          >
+            {" "}
+            Remove{" "}
+          </Button>
+        </ButtonWrapper>
       )}
     </Card>
   );
