@@ -1,9 +1,15 @@
-import { useState } from "react";
-import { Container , RightMoviesWrapper, LeftMoviesWrapper } from "./HomePage.styled"
-import { MovieCard } from "./components/MovieCard";
-import { Movie, movies } from "./movies";
+import React, { useState } from "react";
+import {
+  Container,
+  RightMoviesWrapper,
+  LeftMoviesWrapper,
+  Search,
+} from "./HomePage.styled";
+import MovieCard from "../components/MovieCard/MovieCard";
+import { movies } from "../data/movies";
+import { Movie } from "../types/movie";
 
-export const  HomePage = () => {
+export const HomePage = () => {
   const [leftList, setLeftList] = useState<Movie[]>(movies);
   const [rightList, setRightList] = useState<Movie[]>([]);
   const [search, setSearch] = useState<string>("");
@@ -26,33 +32,49 @@ export const  HomePage = () => {
 
   return (
     <React.Fragment>
-       <Container>
-          <LeftMoviesWrapper>
-            <Input 
-              placeholder="Type for searcing..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            ></Input>
-            {leftList.map((movie,index) => {
-              if (!movie.title.includes(search)) {
-                return false;
-              }
-              return (
-              <MovieCard key={index} isLeft={true} movie={movie} onAddClick={onAddClick} onRemoveClick={onRemoveClick} index={index}></MovieCard>
-              );
-            })}
-          </LeftMoviesWrapper>
-          <RightMoviesWrapper>
-              {rightList.map((movie,index) => {
-                if (!movie.title.includes(search)) {
-                  return false;
-                }
-                return (
-                  <MovieCard key={index} isLeft={false} movie={movie} onAddClick={onAddClick} onRemoveClick={onRemoveClick} index={index}></MovieCard>
-                );
-              })}
-          </RightMoviesWrapper>
-        </Container>
+      <Container>
+        <LeftMoviesWrapper>
+          <Search
+            placeholder="Type for searcing..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          ></Search>
+          {leftList.map((movie, index) => {
+            const lowerCasedTitle = movie.title.toLowerCase();
+            const lowerCasedSearch = search.toLowerCase();
+            if (!lowerCasedTitle.includes(lowerCasedSearch)) {
+              return false;
+            }
+            return (
+              <MovieCard
+                key={index}
+                isLeft={true}
+                movie={movie}
+                onAddClick={onAddClick}
+                onRemoveClick={onRemoveClick}
+                index={index}
+              ></MovieCard>
+            );
+          })}
+        </LeftMoviesWrapper>
+        <RightMoviesWrapper>
+          {rightList.map((movie, index) => {
+            if (!movie.title.includes(search)) {
+              return false;
+            }
+            return (
+              <MovieCard
+                key={index}
+                isLeft={false}
+                movie={movie}
+                onAddClick={onAddClick}
+                onRemoveClick={onRemoveClick}
+                index={index}
+              ></MovieCard>
+            );
+          })}
+        </RightMoviesWrapper>
+      </Container>
     </React.Fragment>
   );
-}
+};

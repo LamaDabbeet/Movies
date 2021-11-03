@@ -1,54 +1,37 @@
-import React from "react";
-import PropTypes from 'prop-types';
-import { Button } from './Button.styled';
+import { FC } from "react";
+import * as Styled from "./Button.styled";
 
-const Button = props => {
-  const p = props.variant !== 'wrapper' ? props.size : '';
-  let as = props.as;
-  if (!as) {
-    as = props.href ? 'a' : 'button';
-  }
+interface ButtonInterface {
+  active?: boolean;
+  disabled?: boolean;
+  onClick: any;
+  size?: string;
+  variant: string;
+  outline?: boolean;
+  children: any;
+}
+
+const Button: FC<ButtonInterface> = ({
+  active = false,
+  disabled = false,
+  onClick,
+  size = "medium",
+  variant,
+  outline = false,
+  children,
+}) => {
   return (
-    <Button
-      as={as}
-      p={p}
-      onClick={e => as === 'a' && !props.href && e.preventDefault()}
-      {...props}
+    <Styled.Button
+      active={active}
+      disabled={disabled}
+      variant={variant}
+      outline={outline}
+      onClick={onClick}
+      size={size}
     >
-      {props.children}
-    </Button>
+      {children}
+    </Styled.Button>
   );
 };
 
-Button.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node
-  ]).isRequired,
-  active: PropTypes.bool,
-  disabled: PropTypes.bool,
-  onClick: PropTypes.func,
-  href: PropTypes.string,
-  outline: PropTypes.bool,
-  target: PropTypes.oneOf(['_blank', '_self', '_parent', '_top']),
-  as: PropTypes.oneOf(['a', 'button']),
-  size: PropTypes.oneOf([
-    'large',
-    'medium',
-    'small',
-    'xsmall'
-  ]),
-  variant: PropTypes.oneOf(['primary', 'secondary','success','info','danger','warning'])
-};
-
-Button.defaultProps = {
-  outline: false,
-  active: false,
-  children: 'Primary',
-  size: 'small',
-  variant: 'primary',
-  as: 'button',
-  disabled: false
-};
-
-export { Button };
+export default Button;

@@ -1,30 +1,29 @@
 export const typography = {
-
   xsmall: {
-    fontSize: '8px',
+    fontSize: "0.5rem",
     lineHeight: 1.1,
-    letterSpacing: 0.5
+    letterSpacing: 0.5,
   },
   small: {
-    fontSize: '14px',
+    fontSize: "0.875rem",
     lineHeight: 1.1,
     letterSpacing: 0.6,
-    fontWeight: 'normal'
+    fontWeight: "normal",
   },
   medium: {
-    fontSize: '16px',
+    fontSize: "1rem",
     lineHeight: 1.1,
-    letterSpacing: 0.7
+    letterSpacing: 0.7,
   },
   large: {
-    fontSize: '20px',
+    fontSize: "1.25rem",
     lineHeight: 1.1,
-    letterSpacing: 0.8
+    letterSpacing: 0.8,
   },
 
   weight: {
     regular: 300,
     semibold: 400,
-    bold: 800
-  }
+    bold: 800,
+  },
 };

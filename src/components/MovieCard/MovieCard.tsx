@@ -1,15 +1,28 @@
-import { differenceInDays, fromUnixTime } from 'date-fns';
-import { Movie } from '../movies';
-import { Card } from './MovieCard.styled';
+import { differenceInDays, fromUnixTime } from "date-fns";
+import { Card, Title, DaysAgo } from "./MovieCard.styled";
+import Button from "../Button/Button";
+import { Movie } from "../../types/movie";
+import { FC } from "react";
 
-export const MovieCard=(props:{movie:Movie,onAddClick:any,onRemoveClick:any,isLeft:boolean,index:number})=> { 
-  const {movie,onAddClick,onRemoveClick,isLeft,index} = props;
+interface MovieCardInterface {
+  movie: Movie;
+  onAddClick: any;
+  onRemoveClick: any;
+  isLeft: boolean;
+  index: number;
+}
+
+const MovieCard: FC<MovieCardInterface> = ({
+  movie,
+  onAddClick,
+  onRemoveClick,
+  isLeft,
+  index,
+}) => {
   return (
     <Card
-      id={isLeft?"left-movie-"+index:"right-movie-"+index}
-      className="movie"
-      style={{ width: 400, height: 100, border: "1px solid black" }}
-      onMouseOver={(e:any) => {
+      id={isLeft ? "left-movie-" + index : "right-movie-" + index}
+      onMouseOver={(e: any) => {
         const el = e.currentTarget;
         let l = 0;
         function updateColor(newl: number) {
@@ -23,26 +36,43 @@ export const MovieCard=(props:{movie:Movie,onAddClick:any,onRemoveClick:any,isLe
         setTimeout(() => updateColor(l + 1), 25);
       }}
       onMouseLeave={(e: any) =>
-  
-        (e.currentTarget.style.backgroundColor = isLeft ?"#64c86420":"#c8646420")
+        (e.currentTarget.style.backgroundColor = isLeft
+          ? "#64c86420"
+          : "#c8646420")
       }
     >
-      <Title id={isLeft?'left-movie-title-'+index:'right-movie-title-'+index}>{movie.title}</Title>
+      <Title
+        id={isLeft ? "left-movie-title-" + index : "right-movie-title-" + index}
+      >
+        {movie.title}
+      </Title>
       <DaysAgo>
         Release date:{" "}
-        {differenceInDays(new Date(), fromUnixTime(movie.release_date))}{" "}
-        days ago
+        {differenceInDays(new Date(), fromUnixTime(movie.release_date))} days
+        ago
       </DaysAgo>
-      {isLeft?
-     /*  <button id="add-button" onClick={() => onAddClick(movie)}>
-        
-      </button> */ <Button variant="success" onClick={()=> onAddClick(movie)}> Add </Button>
-      :
-     /*  <button id="remove-button" onClick={() => onRemoveClick(movie)}>
-         Remove
-      </button> */
-      <Button variant="danger" onClick={()=> onRemoveClick(movie)}> Remove </Button>
-      }
+      {isLeft ? (
+        <Button
+          variant="success"
+          size="large"
+          outline={true}
+          onClick={() => onAddClick(movie)}
+        >
+          {" "}
+          Add{" "}
+        </Button>
+      ) : (
+        <Button
+          variant="danger"
+          size="large"
+          outline={true}
+          onClick={() => onRemoveClick(movie)}
+        >
+          {" "}
+          Remove{" "}
+        </Button>
+      )}
     </Card>
-    )
-}
+  );
+};
+export default MovieCard;
